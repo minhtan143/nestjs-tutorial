@@ -2,7 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { LoginDto, RegisterDto } from './dto';
+import { AuthDto, LoginDto, RegisterDto } from './dto';
+import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async login(loginDto: LoginDto): Promise<{ access_token?: string }> {
+  async login(loginDto: LoginDto): Promise<AuthDto> {
     const user = await this.userRepository.findOne({
       where: [{ email: loginDto.email }, { username: loginDto.email }],
     });
@@ -30,15 +31,13 @@ export class AuthService {
       );
     }
 
-    const payload = {
-      sub: user?.id,
+    const payload: JwtPayloadType = {
+      id: user?.id,
       email: user?.email,
       username: user?.username,
     };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    return new AuthDto(await this.jwtService.signAsync(payload));
   }
 
   async register(registerDto: RegisterDto) {

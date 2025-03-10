@@ -1,6 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtPayloadType } from 'src/auth/strategies/type/jwt-payload.type';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor() {}
+  constructor(private readonly userService: UserService) {}
+
+  @ApiBearerAuth()
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getMe(@Request() req) {
+    return await this.userService.getMe(req.user as JwtPayloadType);
+  }
 }
