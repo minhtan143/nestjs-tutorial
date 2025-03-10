@@ -1,14 +1,14 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../database/core/base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 }
