@@ -9,7 +9,7 @@ import {
 
 export class BaseEntity extends TypeOrmBaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  readonly id!: string;
+  readonly id: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   readonly createdAt: Date;

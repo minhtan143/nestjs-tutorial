@@ -1,8 +1,8 @@
+import { BaseEntity } from '@common/infrastructure/persistence/entities/base.entity';
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../common/entities/base.entity';
 
-@Entity()
-export class User extends BaseEntity {
+@Entity('user')
+export class UserEntity extends BaseEntity {
   @Column({ unique: true })
   email: string;
 

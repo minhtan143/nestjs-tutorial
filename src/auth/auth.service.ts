@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserRepository } from 'src/user/repositories/user.repository';
+import { User } from 'src/user/domain/user.domain';
+import { UserRepository } from 'src/user/infrastrusture/persistence/repositories/user.repository';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 
@@ -21,7 +22,7 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
-      user?.password ?? '',
+      user?.password as string,
     );
 
     if (!isPasswordValid) {
@@ -52,6 +53,6 @@ export class AuthService {
       createdBy: 'system',
     });
 
-    return this.userRepository.save(user);
+    return (await this.userRepository.save(user)) as User;
   }
 }

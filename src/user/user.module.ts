@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository } from './repositories/user.repository';
+import { UserRepository } from './infrastrusture/persistence/repositories/user.repository';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
