@@ -7,14 +7,15 @@ import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class UserRepository extends BaseRepository<UserEntity, User> {
+  constructor(dataSource: DataSource) {
+    super(dataSource, UserEntity);
+  }
+
   protected toDomain(entity: UserEntity): User {
     return UserMapper.toDomain(entity);
   }
+
   protected toEntity(domain: User): UserEntity {
     return UserMapper.toEntity(domain);
-  }
-
-  constructor(dataSource: DataSource) {
-    super(dataSource, UserEntity);
   }
 }
