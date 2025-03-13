@@ -1,5 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/domain/user.domain';
@@ -9,9 +8,10 @@ import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 
 @Injectable()
 export class AuthService {
+  private readonly saltRounds: number = 10;
+
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -44,7 +44,7 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<User> {
     const hashPassword = await bcrypt.hash(
       registerDto.password,
-      this.configService.get('auth.passwordSalt') as string,
+      this.saltRounds,
     );
 
     const user = await this.userRepository.add({
@@ -53,6 +53,6 @@ export class AuthService {
       createdBy: 'system',
     });
 
-    return user as User;
+    return user;
   }
 }
