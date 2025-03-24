@@ -23,5 +23,6 @@ export class RegisterDto {
     description: 'Username',
     example: 'admin',
   })
+  @IsUnique({ tableName: 'user', column: 'username' })
   username: string;
 }

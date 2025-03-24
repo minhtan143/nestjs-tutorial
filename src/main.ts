@@ -13,7 +13,6 @@ async function bootstrap() {
     .setTitle('Todo API')
     .setDescription('API description')
     .setVersion('1.0')
-    .addTag('Todo')
     .addBearerAuth()
     .build();
   const documentFactoty = () => SwaggerModule.createDocument(app, config);

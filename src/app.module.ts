@@ -7,6 +7,7 @@ import databaseConfig from './config/database.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { SharedModule } from './utils/shared.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -22,5 +23,6 @@ import { SharedModule } from './utils/shared.module';
     AuthModule,
     UserModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
