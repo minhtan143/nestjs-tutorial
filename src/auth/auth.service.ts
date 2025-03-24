@@ -57,7 +57,6 @@ export class AuthService {
     const user = await this.userRepository.add({
       ...registerDto,
       password: hashPassword,
-      createdBy: 'system',
     });
 
     return user;
