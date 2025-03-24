@@ -3,6 +3,7 @@ name: nestjs-tutorial
 services:
   dev-db:
     image: postgres
+    container_name: nest-db
     ports:
       - '5432:5432'
     environment:

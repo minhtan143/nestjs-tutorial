@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsUnique } from 'src/utils/validators/unique-email.validator';
 
 export class RegisterDto {
   @IsEmail()
@@ -7,6 +8,7 @@ export class RegisterDto {
     description: 'Email',
     example: 'admin@example.com',
   })
+  @IsUnique({ tableName: 'user', column: 'email' })
   email: string;
 
   @IsNotEmpty()

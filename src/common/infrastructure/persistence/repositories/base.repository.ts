@@ -2,6 +2,7 @@ import {
   DataSource,
   DeepPartial,
   EntityTarget,
+  FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
   Repository,
@@ -44,9 +45,13 @@ export abstract class BaseRepository<
     return entity ? this.toDomain(entity) : null;
   }
 
-  protected async save(domain: Domain): Promise<Domain> {
+  async save(domain: Domain): Promise<Domain> {
     const entity = this.toEntity(domain);
     const savedEntity = await this.repository.save(entity);
     return this.toDomain(savedEntity);
+  }
+
+  async exists(options?: FindManyOptions<Entity>): Promise<boolean> {
+    return await this.repository.exists(options);
   }
 }

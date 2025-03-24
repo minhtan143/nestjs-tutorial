@@ -6,6 +6,7 @@ import authConfig from './config/auth.config';
 import databaseConfig from './config/database.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
+import { SharedModule } from './utils/shared.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
+    SharedModule,
     AuthModule,
     UserModule,
   ],
