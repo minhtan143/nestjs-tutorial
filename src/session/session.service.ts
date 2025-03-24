@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import * as bcrypt from 'bcrypt';
-import { SessionRepository } from './infrastructure/persistence/repositories/session.repository';
 import { User } from 'src/user/domain/user.domain';
 import { Session } from './domain/session.domain';
+import { SessionRepository } from './infrastructure/persistence/repositories/session.repository';
 
 @Injectable()
 export class SessionService {

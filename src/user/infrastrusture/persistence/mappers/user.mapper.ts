@@ -1,6 +1,6 @@
+import { SessionMapper } from 'src/session/infrastructure/persistence/mappers/session.mapper';
 import { User } from 'src/user/domain/user.domain';
 import { UserEntity } from '../entities/user.entity';
-import { SessionMapper } from 'src/session/infrastructure/persistence/mappers/session.mapper';
 
 export class UserMapper {
   static toDomain(entity: UserEntity): User {

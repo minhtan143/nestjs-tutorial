@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtPayloadType } from './type/jwt-payload.type';
-import { ConfigService } from '@nestjs/config';
 
 /**
  * Extracts the access token from a cookie

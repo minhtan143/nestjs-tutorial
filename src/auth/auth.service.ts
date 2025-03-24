@@ -2,14 +2,14 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Session } from 'src/session/domain/session.domain';
+import { SessionService } from 'src/session/session.service';
 import { User } from 'src/user/domain/user.domain';
 import { UserRepository } from 'src/user/infrastrusture/persistence/repositories/user.repository';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 import { JwtRefreshPayloadType } from './strategies/type/jwt-refresh-payload.type';
-import { SessionService } from 'src/session/session.service';
-import { Session } from 'src/session/domain/session.domain';
 
 @Injectable()
 export class AuthService {
