@@ -1,5 +1,6 @@
 import { BaseEntity } from '@common/infrastructure/persistence/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { SessionEntity } from 'src/session/infrastructure/persistence/entities/session.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -11,4 +12,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ unique: true })
   username: string;
+
+  @OneToMany(() => SessionEntity, (session) => session.user)
+  sessions: SessionEntity[];
 }

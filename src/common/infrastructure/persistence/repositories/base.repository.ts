@@ -7,7 +7,7 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
-import { BaseDomain } from '../domain/base.domain';
+import { BaseDomain } from '../../../domain/base.domain';
 import { BaseEntity } from '../entities/base.entity';
 
 export abstract class BaseRepository<

@@ -11,10 +11,10 @@ export class BaseEntity extends TypeOrmBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn({ type: 'timestamptz', update: false })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @Column({ update: false })
+  @Column({ update: false, default: 'system' })
   createdBy: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })

@@ -9,7 +9,7 @@ export class UserService {
 
   async getMe(currentUser: JwtPayloadType): Promise<ProfileDto> {
     const user = await this.userRepository.findOne({
-      where: { id: currentUser.id },
+      where: { id: currentUser.sub },
     });
 
     if (!user) {

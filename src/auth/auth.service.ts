@@ -8,6 +8,8 @@ import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 import { JwtRefreshPayloadType } from './strategies/type/jwt-refresh-payload.type';
+import { SessionService } from 'src/session/session.service';
+import { Session } from 'src/session/domain/session.domain';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +19,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly userRepository: UserRepository,
+    private readonly sessionService: SessionService,
   ) {}
 
   async login(loginDto: LoginDto): Promise<AuthDto> {
@@ -40,7 +43,9 @@ export class AuthService {
       );
     }
 
-    return await this.genTokens(user);
+    const session = await this.sessionService.createSession(user);
+
+    return await this.genTokens(user, session);
   }
 
   async register(registerDto: RegisterDto): Promise<User> {
@@ -60,34 +65,47 @@ export class AuthService {
 
   async refresh(refreshTokenDto: RefreshTokenDto): Promise<AuthDto> {
     try {
-      const payload = this.jwtService.verify(refreshTokenDto.refresh_token, {
-        secret: this.configService.get<string>('auth.jwtRefreshSecret'),
-      });
+      const payload = this.jwtService.verify<JwtRefreshPayloadType>(
+        refreshTokenDto.refresh_token,
+        {
+          secret: this.configService.get<string>('auth.jwtRefreshSecret'),
+        },
+      );
 
       const user = await this.userRepository.findOne({
-        where: { id: payload.id },
+        where: { id: payload.sub },
       });
 
       if (!user) {
         throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
       }
 
-      return await this.genTokens(user);
+      const session = await this.sessionService.getById(payload.sid);
+
+      if (payload.hash != session.hash) {
+        throw new HttpException('Invalid session.', HttpStatus.BAD_REQUEST);
+      }
+
+      return await this.genTokens(user, session);
     } catch (error) {
       Logger.error(error);
       throw new HttpException('Invalid refresh token.', HttpStatus.BAD_REQUEST);
     }
   }
 
-  private async genTokens(user: User): Promise<AuthDto> {
+  private async genTokens(user: User, session: Session): Promise<AuthDto> {
     const accessPayload: JwtPayloadType = {
-      id: user.id,
+      sid: session.id,
+      hash: session.hash,
+      sub: user.id,
       email: user.email,
       username: user.username,
     };
 
     const refreshPayload: JwtRefreshPayloadType = {
-      id: user.id,
+      sid: session.id,
+      hash: session.hash,
+      sub: user.id,
     };
 
     const authToken = new AuthDto();

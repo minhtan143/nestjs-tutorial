@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   public validate(payload: JwtPayloadType) {
-    if (!payload.id) {
+    if (!payload.sid) {
       throw new UnauthorizedException();
     }
     return payload;

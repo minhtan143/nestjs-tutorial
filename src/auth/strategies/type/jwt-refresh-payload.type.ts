@@ -1,3 +1,5 @@
 export type JwtRefreshPayloadType = {
-  id: string;
+  sid: string;
+  hash: string;
+  sub: string;
 };

@@ -1,5 +1,6 @@
 import { User } from 'src/user/domain/user.domain';
 import { UserEntity } from '../entities/user.entity';
+import { SessionMapper } from 'src/session/infrastructure/persistence/mappers/session.mapper';
 
 export class UserMapper {
   static toDomain(entity: UserEntity): User {
@@ -14,6 +15,12 @@ export class UserMapper {
     user.createdBy = entity.createdBy;
     user.updatedBy = entity.updatedBy;
     user.deletedBy = entity.deletedBy;
+
+    if (entity.sessions) {
+      user.sessions = entity.sessions.map((session) =>
+        SessionMapper.toDomain(session),
+      );
+    }
 
     return user;
   }
@@ -30,6 +37,12 @@ export class UserMapper {
     entity.createdBy = domain.createdBy;
     entity.updatedBy = domain.updatedBy;
     entity.deletedBy = domain.deletedBy;
+
+    if (domain.sessions) {
+      entity.sessions = entity.sessions.map((session) =>
+        SessionMapper.toEntity(session),
+      );
+    }
 
     return entity;
   }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { IsUnique } from 'src/utils/validators/unique-email.validator';
+import { IsUnique } from 'src/shared/validators/unique-email.validator';
 
 export class RegisterDto {
   @IsEmail()
