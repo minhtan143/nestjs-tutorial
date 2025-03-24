@@ -9,22 +9,22 @@ import {
 
 export class BaseEntity extends TypeOrmBaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  readonly id: string;
+  id: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
-  readonly createdAt: Date;
+  @CreateDateColumn({ type: 'timestamptz', update: false })
+  createdAt: Date;
 
   @Column({ update: false })
-  readonly createdBy: string;
+  createdBy: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  readonly updatedAt: Date;
+  updatedAt: Date;
 
   @Column({ nullable: true })
   updatedBy: string;
 
   @DeleteDateColumn({ type: 'timestamptz' })
-  readonly deletedAt: Date;
+  deletedAt: Date;
 
   @Column({ nullable: true })
   deletedBy: string;
