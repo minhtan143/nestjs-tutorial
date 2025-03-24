@@ -11,7 +11,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
-  async getMe(@Request() req) {
-    return await this.userService.getMe(req.user as JwtPayloadType);
+  async getMe(@Request() request) {
+    return await this.userService.getMe(request.user as JwtPayloadType);
   }
 }

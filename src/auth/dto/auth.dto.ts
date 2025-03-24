@@ -4,7 +4,9 @@ export class AuthDto {
   @ApiProperty()
   access_token: string;
 
-  constructor(access_token: string) {
-    this.access_token = access_token;
-  }
+  @ApiProperty()
+  refresh_token: string;
+
+  @ApiProperty()
+  expires_in: number;
 }

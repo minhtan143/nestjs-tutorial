@@ -3,6 +3,7 @@ import { ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,12 @@ export class AuthController {
     });
 
     return res.json(authToken);
+  }
+
+  @Post('refresh')
+  @ApiOkResponse({ type: AuthDto })
+  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    return await this.authService.refresh(refreshTokenDto);
   }
 
   @Post('register')
