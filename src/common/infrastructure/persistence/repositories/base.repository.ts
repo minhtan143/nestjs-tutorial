@@ -54,4 +54,8 @@ export abstract class BaseRepository<
   async exists(options?: FindManyOptions<Entity>): Promise<boolean> {
     return await this.repository.exists(options);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.repository.softDelete(id);
+  }
 }

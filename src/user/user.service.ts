@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtPayloadType } from 'src/auth/strategies/type/jwt-payload.type';
 import { ProfileDto } from './dto/profile.dto';
 import { UserRepository } from './infrastrusture/persistence/repositories/user.repository';
@@ -13,7 +13,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     const profile = new ProfileDto();

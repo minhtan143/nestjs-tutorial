@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtPayloadType } from 'src/auth/strategies/type/jwt-payload.type';
@@ -11,7 +11,7 @@ export class UserController {
   @ApiBearerAuth()
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
-  async getMe(@Request() request) {
+  async getMe(@Req() request) {
     return await this.userService.getMe(request.user as JwtPayloadType);
   }
 }

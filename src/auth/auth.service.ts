@@ -92,6 +92,14 @@ export class AuthService {
     }
   }
 
+  async logout(jwt: JwtPayloadType): Promise<void> {
+    const session = await this.sessionService.getById(jwt.sid);
+
+    if (session.hash == jwt.hash) {
+      await this.sessionService.deleteSession(session.id);
+    }
+  }
+
   private async genTokens(user: User, session: Session): Promise<AuthDto> {
     const accessPayload: JwtPayloadType = {
       sid: session.id,

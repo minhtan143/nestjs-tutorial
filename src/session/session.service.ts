@@ -22,6 +22,10 @@ export class SessionService {
     return session;
   }
 
+  async deleteSession(id: string): Promise<void> {
+    await this.sessionRepository.delete(id);
+  }
+
   async getById(id: string): Promise<Session> {
     const session = await this.sessionRepository.findOne({ where: { id } });
 

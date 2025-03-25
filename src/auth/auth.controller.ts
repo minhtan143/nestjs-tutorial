@@ -1,9 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 
 @Controller('auth')
 export class AuthController {
@@ -32,5 +34,13 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  async logout(@Req() req, @Res() res: Response) {
+    res.clearCookie('access_token');
+    await this.authService.logout(req.user as JwtPayloadType);
+    return res.sendStatus(200);
   }
 }
