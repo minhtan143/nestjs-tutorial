@@ -7,6 +7,7 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseDomain } from '../../../domain/base.domain';
 import { BaseEntity } from '../entities/base.entity';
 
@@ -55,7 +56,12 @@ export abstract class BaseRepository<
     return await this.repository.exists(options);
   }
 
-  async delete(id: string): Promise<void> {
-    await this.repository.softDelete(id);
+  async delete(id: string, deletedBy?: string): Promise<void> {
+    await this.dataSource.transaction(async () => {
+      await this.repository.update(id, {
+        deletedBy: deletedBy || 'system',
+      } as unknown as QueryDeepPartialEntity<Entity>);
+      await this.repository.softDelete(id);
+    });
   }
 }
