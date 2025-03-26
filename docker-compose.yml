@@ -49,6 +49,7 @@ services:
       - nest-db
     networks:
       - nestjs-tutorial-network
+    restart: always
 
 networks:
   nestjs-tutorial-network:

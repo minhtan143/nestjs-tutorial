@@ -22,7 +22,9 @@ async function bootstrap() {
     SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentFactoty, swaggerCustomOptions);
 
-  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ stopAtFirstError: true, enableDebugMessages: true }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();
