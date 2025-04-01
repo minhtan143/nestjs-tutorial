@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { Session } from 'src/session/domain/session.domain';
 import { SessionService } from 'src/session/session.service';
 import { User } from 'src/user/domain/user.domain';
+import { ProfileDto } from 'src/user/dto/profile.dto';
 import { UserRepository } from 'src/user/infrastrusture/persistence/repositories/user.repository';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -48,7 +49,7 @@ export class AuthService {
     return await this.genTokens(user, session);
   }
 
-  async register(registerDto: RegisterDto): Promise<User> {
+  async register(registerDto: RegisterDto): Promise<ProfileDto> {
     const hashPassword = await bcrypt.hash(
       registerDto.password,
       this.saltRounds,
@@ -59,7 +60,13 @@ export class AuthService {
       password: hashPassword,
     });
 
-    return user;
+    const profile = new ProfileDto();
+    profile.id = user.id;
+    profile.username = user.username;
+    profile.email = user.email;
+    profile.createdAt = user.createdAt;
+
+    return profile;
   }
 
   async refresh(refreshTokenDto: RefreshTokenDto): Promise<AuthDto> {

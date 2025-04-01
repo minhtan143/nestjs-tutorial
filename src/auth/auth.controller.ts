@@ -12,7 +12,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOkResponse, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
-import { User } from 'src/user/domain/user.domain';
+import { ProfileDto } from 'src/user/dto/profile.dto';
 import { AuthService } from './auth.service';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -47,7 +47,7 @@ export class AuthController extends BaseController {
 
   @Post('register')
   @HttpCode(200)
-  @ApiOkResponse({ type: User, description: 'Registration successful' })
+  @ApiOkResponse({ type: ProfileDto, description: 'Registration successful' })
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
