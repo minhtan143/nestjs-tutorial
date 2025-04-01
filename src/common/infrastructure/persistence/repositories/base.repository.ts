@@ -1,11 +1,14 @@
+import { PaginationPayload } from '@common/dto/pagination.payload';
 import {
   DataSource,
   DeepPartial,
+  Entity,
   EntityTarget,
   FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
   Repository,
+  SelectQueryBuilder,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseDomain } from '../../../domain/base.domain';
@@ -32,6 +35,33 @@ export abstract class BaseRepository<
     const createdEntity = this.repository.create(entity);
     const savedEntity = await this.repository.save(createdEntity);
     return this.toDomain(savedEntity);
+  }
+
+  async find(options?: FindManyOptions<Entity>): Promise<Domain[]> {
+    const entities = await this.repository.find(options);
+    return entities.map((entity) => this.toDomain(entity));
+  }
+
+  async paginate<T extends PaginationPayload>(
+    options: FindManyOptions<Entity> | SelectQueryBuilder<Entity>,
+    payload: T,
+  ): Promise<[Domain[], number]> {
+    let entities: Entity[] = [];
+    let count = 0;
+
+    if (options instanceof SelectQueryBuilder) {
+      options.skip((payload.page - 1) * payload.limit).take(payload.limit);
+      [entities, count] = await options.getManyAndCount();
+    } else {
+      [entities, count] = await this.repository.findAndCount({
+        ...options,
+        skip: (payload.page - 1) * payload.limit,
+        take: payload.limit,
+      });
+    }
+
+    const items = entities.map((entity) => this.toDomain(entity));
+    return [items, count];
   }
 
   async findOne(options: FindOneOptions<Entity>): Promise<Domain | null> {
@@ -63,5 +93,9 @@ export abstract class BaseRepository<
       } as unknown as QueryDeepPartialEntity<Entity>);
       await this.repository.softDelete(id);
     });
+  }
+
+  createQueryBuilder() {
+    return this.repository.createQueryBuilder(Entity.name);
   }
 }

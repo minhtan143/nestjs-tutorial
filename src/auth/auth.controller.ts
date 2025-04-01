@@ -1,3 +1,4 @@
+import { BaseController } from '@common/base.controller';
 import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOkResponse } from '@nestjs/swagger';
@@ -8,8 +9,10 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { JwtPayloadType } from './strategies/type/jwt-payload.type';
 
 @Controller('auth')
-export class AuthController {
-  constructor(private authService: AuthService) {}
+export class AuthController extends BaseController {
+  constructor(private authService: AuthService) {
+    super();
+  }
 
   @Post('login')
   @ApiOkResponse({ type: AuthDto })

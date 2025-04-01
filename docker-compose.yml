@@ -36,11 +36,11 @@ services:
     networks:
       - nestjs-tutorial-network
 
-  nest-app:
+  nest-api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-app
+    container_name: nest-api
     env_file:
       - .env.production
     ports:

@@ -8,6 +8,7 @@ import databaseConfig from './config/database.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { SessionModule } from './session/session.module';
 import { SharedModule } from './shared/shared.module';
+import { TaskModule } from './task/task.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     SessionModule,
+    TaskModule,
   ],
   controllers: [AppController],
 })
