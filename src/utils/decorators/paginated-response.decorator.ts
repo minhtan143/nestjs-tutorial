@@ -4,10 +4,12 @@ import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 
 export const ApiPaginatedResponse = <TModel extends Type<any>>(
   model: TModel,
+  options: Partial<Parameters<typeof ApiOkResponse>[0]> = {},
 ) => {
   return applyDecorators(
     ApiExtraModels(Pagination, model),
     ApiOkResponse({
+      ...options,
       schema: {
         allOf: [
           { $ref: getSchemaPath(Pagination) },

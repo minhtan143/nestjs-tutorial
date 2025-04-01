@@ -16,7 +16,9 @@ export class TaskController extends BaseController {
   @ApiBearerAuth()
   @Get('list')
   @UseGuards(AuthGuard('jwt'))
-  @ApiPaginatedResponse(TaskDto)
+  @ApiPaginatedResponse(TaskDto, {
+    description: 'Get list of tasks',
+  })
   async getTasks(payload: GetTaskPaginationPayload) {
     return await this.taskService.getTasks(payload);
   }

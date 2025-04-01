@@ -1,8 +1,18 @@
 import { BaseController } from '@common/base.controller';
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
+import { User } from 'src/user/domain/user.domain';
 import { AuthService } from './auth.service';
 import { AuthDto, LoginDto, RegisterDto } from './dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -15,7 +25,7 @@ export class AuthController extends BaseController {
   }
 
   @Post('login')
-  @ApiOkResponse({ type: AuthDto })
+  @ApiOkResponse({ type: AuthDto, description: 'Login successful' })
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const authToken = await this.authService.login(loginDto);
 
@@ -25,25 +35,32 @@ export class AuthController extends BaseController {
       sameSite: 'strict',
     });
 
-    return res.json(authToken);
+    return res.status(HttpStatus.OK).json(authToken);
   }
 
   @Post('refresh')
-  @ApiOkResponse({ type: AuthDto })
+  @HttpCode(200)
+  @ApiOkResponse({ type: AuthDto, description: 'Refresh token successful' })
   async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
     return await this.authService.refresh(refreshTokenDto);
   }
 
   @Post('register')
+  @HttpCode(200)
+  @ApiOkResponse({ type: User, description: 'Registration successful' })
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
 
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Logout successful',
+  })
   async logout(@Req() req, @Res() res: Response) {
     res.clearCookie('access_token');
     await this.authService.logout(req.user as JwtPayloadType);
-    return res.sendStatus(200);
+    return res.sendStatus(HttpStatus.NO_CONTENT);
   }
 }

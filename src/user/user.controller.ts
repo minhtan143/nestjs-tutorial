@@ -15,7 +15,7 @@ export class UserController extends BaseController {
   @ApiBearerAuth()
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
-  @ApiOkResponse({ type: ProfileDto })
+  @ApiOkResponse({ type: ProfileDto, description: 'User profile' })
   async getMe(@Req() request) {
     return await this.userService.getMe(request.user as JwtPayloadType);
   }
