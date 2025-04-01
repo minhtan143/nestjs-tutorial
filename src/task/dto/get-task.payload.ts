@@ -1,12 +1,11 @@
 import { PaginationPayload } from '@common/dto/pagination.payload';
 import { TaskStatus } from '@common/enums/task.enum';
-import { IsEnum, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class GetTaskPaginationPayload extends PaginationPayload {
-  @IsOptional()
+  @ApiProperty({ required: false })
   filter: string;
 
-  @IsOptional()
-  @IsEnum(TaskStatus)
+  @ApiProperty({ enum: TaskStatus, required: false })
   status: TaskStatus;
 }

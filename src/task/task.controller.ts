@@ -1,5 +1,5 @@
 import { BaseController } from '@common/base.controller';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from '@utils/decorators/paginated-response.decorator';
@@ -19,7 +19,7 @@ export class TaskController extends BaseController {
   @ApiPaginatedResponse(TaskDto, {
     description: 'Get list of tasks',
   })
-  async getTasks(payload: GetTaskPaginationPayload) {
+  async getTasks(@Query() payload: GetTaskPaginationPayload) {
     return await this.taskService.getTasks(payload);
   }
 }
