@@ -1,14 +1,10 @@
-export abstract class BaseController {
-  constructor() {}
+import { HttpStatus } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { ValidationErrorResponseDto } from './dto/validation-error.dto';
 
-  //   // This method can be used to handle common errors
-  //   protected handleError(error: any): void {
-  //     console.error('An error occurred:', error);
-  //     throw new Error('An unexpected error occurred');
-  //   }
-
-  //   // This method can be overridden in derived classes for specific logging
-  //   protected log(message: string): void {
-  //     console.log(message);
-  //   }
-}
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  description: 'Bad Request',
+  type: ValidationErrorResponseDto,
+})
+export abstract class BaseController {}
