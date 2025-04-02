@@ -4,6 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 import 'dotenv/config';
+import * as morgan from 'morgan';
 import { AppModule } from './app.module';
 import { swaggerConfig, swaggerCustomOptions } from './config/swagger.config';
 
@@ -13,6 +14,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.use(cookieParser());
+  app.use(morgan('tiny'));
   app.enableCors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
